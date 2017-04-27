@@ -7,8 +7,11 @@ public class GazeGestureManager : MonoBehaviour {
 
     GestureRecognizer recognizer;
     public GameObject man;
+    public GameObject heart;
     public GameObject root;
     public float scaleSpeed = 1.01f;
+    public float manCutoff = 20;
+    public float heartCutoff = 40;
     public bool isScaling = false;
 
     // Use this for initialization
@@ -28,10 +31,14 @@ public class GazeGestureManager : MonoBehaviour {
         if (isScaling)
         {
             root.transform.localScale *= scaleSpeed;
-            if (root.transform.localScale.magnitude > 10)
+            if (root.transform.localScale.magnitude > manCutoff)
             {
-                isScaling = false;
                 man.SetActive(false);
+            }
+            if (root.transform.localScale.magnitude > heartCutoff)
+            {
+                heart.SetActive(false);
+                isScaling = false;
             }
         }
     }
