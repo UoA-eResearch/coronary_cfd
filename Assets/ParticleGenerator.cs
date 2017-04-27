@@ -13,6 +13,7 @@ public class ParticleGenerator : MonoBehaviour
     private Dictionary<int, List<Dictionary<string, Vector3>>> tslices = new Dictionary<int, List<Dictionary<string, Vector3>>>();
     private int highestFrame = 0;
     private int currentFrame = 0;
+    public int skipFactor = 200;
 	private string[] separator = new string[] { ", " };
     
     // Use this for initialization
@@ -55,7 +56,7 @@ public class ParticleGenerator : MonoBehaviour
             var headers = csv[5].Split(separator, StringSplitOptions.RemoveEmptyEntries);
             Vector3 modelOrigin = Vector3.zero;
             var count = 0;
-            for (int i = 6; i < csv.Length; i += 200)
+            for (int i = 6; i < csv.Length; i += skipFactor)
             {
                 count++;
                 var line = csv[i];
