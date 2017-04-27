@@ -111,7 +111,7 @@ public class ParticleGenerator : MonoBehaviour
                 glyph = gameObject.transform.GetChild(i).gameObject;
             }
             glyph.transform.localPosition = pos;
-            glyph.transform.LookAt(glyph.transform.TransformPoint(direction));
+            glyph.transform.LookAt(glyph.transform.position + direction);
             glyph.transform.localScale = Vector3.one * m;
             
             foreach (var rend in glyph.GetComponentsInChildren<Renderer>())
