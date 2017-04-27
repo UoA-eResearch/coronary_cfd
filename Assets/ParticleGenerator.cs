@@ -22,6 +22,7 @@ public class ParticleGenerator : MonoBehaviour
 		var headers = csv[5].Split(separator, StringSplitOptions.RemoveEmptyEntries);
 		Vector3 modelOrigin = Vector3.zero;
 		var count = 0;
+		float maxM = 0;
 		for (int i = 6; i < csv.Length; i+=50)
 		{
 			count++;
@@ -53,6 +54,16 @@ public class ParticleGenerator : MonoBehaviour
 			glyph.transform.localPosition = pos - modelOrigin;
 			glyph.transform.LookAt(glyph.transform.TransformPoint(direction));
 			glyph.transform.localScale = Vector3.one * direction.magnitude;
+			float m = direction.magnitude;
+			if (m > maxM) maxM = m;
+			foreach (var rend in glyph.GetComponentsInChildren<Renderer>())
+			{
+				var color = Color.HSVToRGB(1 - m / .5f, 1, 1);
+				//rend.material.color = color;
+				MaterialPropertyBlock props = new MaterialPropertyBlock();
+				props.SetColor("_Color", color);
+				rend.SetPropertyBlock(props);
+			}
 
 			// Particle system
 			/*
@@ -65,7 +76,7 @@ public class ParticleGenerator : MonoBehaviour
 			ma.startSpeed = direction.magnitude * 10;
 			*/
 		}
-		Debug.Log("plotted " + count + " data points in  " + sw.Elapsed);
+		Debug.Log("plotted " + count + " data points in  " + sw.Elapsed + " - max M: " + maxM);
 	}
 
 	// Update is called once per frame
