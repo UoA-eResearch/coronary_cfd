@@ -8,7 +8,6 @@ using System.Text.RegularExpressions;
 
 public class ParticleGenerator : MonoBehaviour
 {
-	public GameObject particleSystemPrefab;
 	public GameObject arrowPrefab;
     private Dictionary<int, List<Dictionary<string, Vector3>>> tslices = new Dictionary<int, List<Dictionary<string, Vector3>>>();
     private int highestFrame = 0;
@@ -123,16 +122,15 @@ public class ParticleGenerator : MonoBehaviour
                 props.SetColor("_Color", color);
                 rend.SetPropertyBlock(props);
             }
-
-            // Particle system
             /*
-            var p = Instantiate(particleSystemPrefab);
-            p.transform.parent = gameObject.transform;
-            p.transform.localPosition = pos;
-            p.transform.LookAt(p.transform.TransformPoint(direction));
-            var ps = p.GetComponent<ParticleSystem>();
-            var ma = ps.main;
-            ma.startSpeed = direction.magnitude * 10;
+            try
+            {
+                var ps = glyph.GetComponent<ParticleSystem>();
+                var ma = ps.main;
+                ma.startSpeed = direction.magnitude * 10;
+            } catch
+            {
+            }
             */
         }
     }
