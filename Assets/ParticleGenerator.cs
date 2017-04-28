@@ -13,7 +13,8 @@ public class ParticleGenerator : MonoBehaviour
     private int highestFrame = 0;
     private int currentFrame = 0;
     public int skipFactor = 200;
-	private string[] separator = new string[] { ", " };
+    public float maxM = 0f;
+    private string[] separator = new string[] { ", " };
     
     // Use this for initialization
     void Start()
@@ -83,13 +84,17 @@ public class ParticleGenerator : MonoBehaviour
                     pos -= modelOrigin;
                 }
                 var direction = new Vector3(d["Velocity u [ m s^-1 ]"], d["Velocity v [ m s^-1 ]"], d["Velocity w [ m s^-1 ]"]);
-                tslices[ts].Add(new Dictionary<string, Vector3>() {
+                if (direction.magnitude > maxM)
+                {
+                    maxM = direction.magnitude;
+                }
+                    tslices[ts].Add(new Dictionary<string, Vector3>() {
                     { "pos", pos },
                     { "direction", direction }
                 });
             }
         }
-        Debug.Log(csvs.Length + " files loaded in " + sw.Elapsed);
+        Debug.Log(csvs.Length + " files loaded in " + sw.Elapsed + ". Maxm: " + maxM);
     }
 
     void LoadFrame(int frame)
@@ -130,7 +135,8 @@ public class ParticleGenerator : MonoBehaviour
             
             foreach (var rend in glyph.GetComponentsInChildren<Renderer>())
             {
-                var color = Color.HSVToRGB(1 - m / .5f, 1, 1);
+                float h = 1 - m / maxM;
+                var color = Color.HSVToRGB(h, 1, 1);
                 //rend.material.color = color;
                 MaterialPropertyBlock props = new MaterialPropertyBlock();
                 props.SetColor("_Color", color);
