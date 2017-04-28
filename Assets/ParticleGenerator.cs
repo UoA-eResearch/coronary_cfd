@@ -102,16 +102,26 @@ public class ParticleGenerator : MonoBehaviour
         var keys = tslices.Keys.ToList();
         int a = 0;
         int b = 0;
-        for (int i = 0; i < keys.Count - 1; i++)
+        float factor = 0;
+        if (frame < highestFrame)
         {
-            a = keys[i];
-            b = keys[i + 1];
-            if (a <= frame && b >= frame)
+            for (int i = 0; i < keys.Count - 1; i++)
             {
-                break;
+                a = keys[i];
+                b = keys[i + 1];
+                if (a <= frame && b >= frame)
+                {
+                    break;
+                }
             }
+            factor = 1.0f * (frame - a) / (b - a);
         }
-        float factor = 1.0f * (frame - a) / (b - a);
+        else
+        {
+            factor = (frame - highestFrame) / 10f;
+            a = highestFrame;
+            b = 0;
+        }
         for (int i = 0; i < tslices[a].Count; i++) {
             var pta = tslices[a][i];
             var ptb = tslices[b][i];
