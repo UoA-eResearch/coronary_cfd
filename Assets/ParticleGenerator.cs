@@ -26,7 +26,7 @@ public class ParticleGenerator : MonoBehaviour
     void Update()
     {
         int f = (int)(Time.time * 10) % (highestFrame + 10);
-        if (tslices.ContainsKey(f) && f != currentFrame)
+        if (f != currentFrame)
         {
             Debug.Log("Loading frame: " + f);
             LoadFrame(f);
@@ -94,10 +94,24 @@ public class ParticleGenerator : MonoBehaviour
 
     void LoadFrame(int frame)
     {
-        for (int i = 0; i < tslices[frame].Count; i++) {
-            var pt = tslices[frame][i];
-            var pos = pt["pos"];
-            var direction = pt["direction"];
+        var keys = tslices.Keys.ToList();
+        int a = 0;
+        int b = 0;
+        for (int i = 0; i < keys.Count - 1; i++)
+        {
+            a = keys[i];
+            b = keys[i + 1];
+            if (a <= frame && b >= frame)
+            {
+                break;
+            }
+        }
+        float factor = 1.0f * (frame - a) / (b - a);
+        for (int i = 0; i < tslices[a].Count; i++) {
+            var pta = tslices[a][i];
+            var ptb = tslices[b][i];
+            var pos = Vector3.Lerp(pta["pos"], ptb["pos"], factor);
+            var direction = Vector3.Lerp(pta["direction"], ptb["direction"], factor);
             var m = direction.magnitude;
 
             // Arrow glyph
